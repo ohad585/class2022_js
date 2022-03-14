@@ -3,4 +3,19 @@
 GET http://localhost:3000/post
 ###
 
+GET http://localhost:3000/post/6226100286d80c64c2ae54c1
+
+###
+
+GET http://localhost:3000/post?sender=Mr Shalom
+
+
+###
+
 POST http://localhost:3000/post
+Content-Type: application/json
+
+{
+    "message" :"1234 Try ",
+    "sender" :"Shalom"
+}

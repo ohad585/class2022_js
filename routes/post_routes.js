@@ -8,5 +8,5 @@ router.get('/',Post.getAllPosts)
 
 router.post('/',Post.createNewPost)
 
-
+router.get('/:id',Post.getPostById)
 module.exports = router
