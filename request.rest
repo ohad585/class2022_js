@@ -7,7 +7,7 @@ GET http://localhost:3000/post/6226100286d80c64c2ae54c1
 
 ###
 
-GET http://localhost:3000/post?sender=Mr Shalom
+GET http://localhost:3000/post?sender=Shalom
 
 
 ###

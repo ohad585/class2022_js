@@ -59,6 +59,11 @@ const getPostById =async (req,res)=>{
     }
     try{
         post =await Post.findById(id)
+        if(post == undefined | post == null){
+            res.status(400).send({
+                'err':'No post found'
+            })
+        }
         res.status(200).send(post)
     }catch(err){
         return res.status(400).send({
