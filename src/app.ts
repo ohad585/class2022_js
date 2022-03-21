@@ -1,8 +1,8 @@
-const app = require("./server")
+import app from "./server"
 
 const port = process.env.port
 app.listen(port ,()=>{
     console.log('Exaple app listening on port '+port)
 })
 
-module.exports = app
+export = app

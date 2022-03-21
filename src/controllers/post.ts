@@ -1,5 +1,5 @@
-const Post = require('../models/post_model')
-
+import Post from '../models/post_model'
+import { Request,Response } from 'express'
 /**
  * Gets all the post
  * @param {*http request} req 
@@ -11,7 +11,7 @@ const getAllPosts =async (req,res)=>{
     try{
         var posts
         const sender = req.query.sender
-        if(sender == null | sender == undefined){
+        if(sender == null || sender == undefined){
             posts = await Post.find()
         }else{
             posts = await Post.find({'sender' : sender})
@@ -30,15 +30,15 @@ const getAllPosts =async (req,res)=>{
  * @param {http request} req 
  * @param {*http response} res 
  */
-const createNewPost = async(req ,res)=>{
+const createNewPost = async(req:Request ,res: Response)=>{
     console.log(req.body)
-    const post = Post({
+    const post = new Post({
         message : req.body.message,
         sender : req.body.sender
     })
 
     try{
-        newPost= await post.save()
+        const newPost= await post.save()
         res.status(200).send(newPost)
     }catch(err){
         res.status(400).send({
@@ -49,17 +49,17 @@ const createNewPost = async(req ,res)=>{
 }
 
 
-const getPostById =async (req,res)=>{
+const getPostById =async (req :Request,res: Response)=>{
     console.log("getPostsById id=" + req.params.id);
     const id = req.params.id
-    if(id == null | id == undefined){
+    if(id == null || id == undefined){
         return res.status(400).send({
             'err':'no id provided'
         })
     }
     try{
-        post =await Post.findById(id)
-        if(post == undefined | post == null){
+        const post =await Post.findById(id)
+        if(post == undefined || post == null){
             res.status(400).send({
                 'err':'No post found'
             })
@@ -71,7 +71,7 @@ const getPostById =async (req,res)=>{
         })
     }
 }
-module.exports = {
+export = {
     getAllPosts,
     createNewPost,
     getPostById
