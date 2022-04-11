@@ -37,19 +37,26 @@ const register =async (req,res)=>{
     })
     try{
         const newUser = await user.save()
+
         const access_token = await jwt
-        .sign({"id":newUser._id},
+        .sign({"_id":newUser._id},
         process.env.ACCESS_TOKEN_SECRET,
         {expiresIn : process.env.TOKEN_EXPIRATION})
-        res.status(StatusCodes.OK).send({"access_token": access_token})
+
+        const refresh_token = await jwt
+        .sign({"_id":newUser._id},
+        process.env.REFRESH_TOKEN_SECRET)
+
+        newUser.refreshToken = refresh_token
+        await newUser.save()
+        res.status(StatusCodes.OK).send({ accessToken : access_token,refreshToken:refresh_token ,_id:newUser._id})
     }catch(err){
         return res.status(StatusCodes.BAD_REQUEST).send({'error':err.message})
     }
-    //login - create access token
 
 }
 /**
- * Gets all the post
+ * Login
  * @param {*http request} req 
  * @param {*http response} res 
  */
@@ -73,10 +80,18 @@ const register =async (req,res)=>{
             return res.status(StatusCodes.BAD_REQUEST).send({'error':'Wrong user or password'})
         }
         const access_token = await jwt
-        .sign({"id":user._id},
+        .sign({"_id":user._id},
         process.env.ACCESS_TOKEN_SECRET,
         {expiresIn : process.env.TOKEN_EXPIRATION})
-        res.status(StatusCodes.OK).send({"access_token": access_token})
+
+        const refresh_token = await jwt
+        .sign({"_id":user._id},
+        process.env.REFRESH_TOKEN_SECRET)
+
+        user.refreshToken = refresh_token
+        await user.save()
+
+        res.status(StatusCodes.OK).send({ accessToken : access_token,refreshToken: refresh_token,_id:user._id})
     }catch(err){
         return res.status(StatusCodes.BAD_REQUEST).send({'error':err.message})
     }
@@ -84,8 +99,66 @@ const register =async (req,res)=>{
     //calc access token
 
 }
+/**
+ * renewToken
+ * get new access token by the refresh token
+ * @param {*http request} req 
+ * @param {*http response} res 
+ */
+const renewToken = async (req,res)=>{
+    //validate refresh token
+    let tokken = req.headers['authorization']
+    if(tokken == null || tokken == undefined){
+        return res.status(StatusCodes.FORBIDDEN).send({'error':'token not provided'})
+    }
+    tokken = tokken.split(' ')[1]
+    jwt.verify(tokken,
+        process.env.REFRESH_TOKEN_SECRET,async (err,userID)=>{
+            if(err){
+                return res.status(StatusCodes.FORBIDDEN).send({'error':'token not provided'})
+            }
+            req.body._id = userID
+            try{
+            let user = await User.findById(userID)
+            if(user.refreshToken!=tokken){
+                user.refreshToken=''
+                await user.save()
+                return res.status(StatusCodes.FORBIDDEN).send({'error':err.message})
+            }
+            const access_token = await jwt
+            .sign({"_id":user._id},
+            process.env.ACCESS_TOKEN_SECRET,
+            {expiresIn : process.env.TOKEN_EXPIRATION})
+
+            const refresh_token = await jwt
+            .sign({"_id":user._id},
+            process.env.REFRESH_TOKEN_SECRET)
+
+            user.refreshToken = refresh_token
+            await user.save()
+
+            res.status(StatusCodes.OK).send({ accessToken : access_token,refreshToken: refresh_token,_id:user._id})
+
+            }catch(err) {
+                return res.status(StatusCodes.FORBIDDEN).send({'error':err.message})
+            }
+        })
+
+}
+
+/**
+ * renewToken
+ * get new access token by the refresh token
+ * @param {*http request} req 
+ * @param {*http response} res 
+ */
+ const test = async (req,res)=>{
+    res.status(StatusCodes.OK).send({})
+ }
 
 export = {
     register,
-    login
+    login,
+    renewToken,
+    test
 }
