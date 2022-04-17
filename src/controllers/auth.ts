@@ -135,6 +135,7 @@ const renewToken = async (req,res)=>{
             process.env.REFRESH_TOKEN_SECRET)
 
             user.refreshToken = refresh_token
+            user.accessToken = access_token
             await user.save()
 
             res.status(StatusCodes.OK).send({ accessToken : access_token,refreshToken: refresh_token,_id:user._id})

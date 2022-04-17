@@ -4,10 +4,12 @@
   "description": "web class demo",
   "main": "app.js",
   "scripts": {
-    "test": "tsc && jest --detectOpenHandles --forceExit",
+    "test": "tsc && jest --runInBand --silent",
+    "testio": "tsc && jest ./src/test/socket.test.ts --runInBand --silent --detectOpenHandles",
     "start": "tsc && node dist/app.js",
     "lint": "eslint . --ext .ts",
-    "devstart": "nodemon ./src/app.ts"
+    "devstart": "nodemon ./src/app.ts",
+    "startio": "tsc && node dist/socket_server.js"
   },
   "author": "ohad shalom",
   "license": "ISC",
@@ -21,7 +23,9 @@
     "http-status-codes": "^2.2.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.2.4",
-    "openssl": "^2.0.0"
+    "openssl": "^2.0.0",
+    "socket.io": "^4.4.1",
+    "socket.io-client": "^4.4.1"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
