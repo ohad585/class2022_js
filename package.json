@@ -4,7 +4,7 @@
   "description": "web class demo",
   "main": "app.js",
   "scripts": {
-    "test": "tsc && jest --detectOpenHandles --forceExit",
+    "test": "tsc && jest --detectOpenHandles --runInBand --forceExit",
     "start": "tsc && node dist/app.js",
     "lint": "eslint . --ext .ts",
     "devstart": "nodemon ./src/app.ts"
@@ -21,7 +21,8 @@
     "http-status-codes": "^2.2.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.2.4",
-    "openssl": "^2.0.0"
+    "openssl": "^2.0.0",
+    "socket.io": "^4.4.1"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",

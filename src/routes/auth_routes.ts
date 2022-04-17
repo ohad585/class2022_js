@@ -36,8 +36,8 @@ const router = express.Router()
 *                   type: string
 *                   description: The user email
 *               password:
-*               type: string
-*               description: The user password
+*                   type: string
+*                   description: The user password
 *           example:
 *               email: 'bob@gmail.com'
 *               password: '123456'
@@ -67,7 +67,7 @@ router.post('/login',Auth.login)
 */
 router.post('/register',Auth.register)
 
-router.post('/refresh',Auth.renewToken)
+router.get('/refresh',Auth.renewToken)
 
 router.get('/test',authenticate,Auth.test)
 

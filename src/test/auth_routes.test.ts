@@ -14,11 +14,11 @@ let accessToken = ""
 let refreshToken = ''
 
 beforeAll(async () => {
-    await User.deleteOne({"email":email})
+    await User.deleteMany({"email":email})
 })
 
 afterAll(async () => {
-    await User.deleteOne({"email":email})
+    await User.deleteMany({"email":email})
     mongoose.connection.close()
 })
 
@@ -87,15 +87,15 @@ describe("This is Auth API test",()=>{
 
     test("Test refresh token", async ()=>{
         //wait untill access token is expiered
-        //jest.setTimeout(10000)
+
         await sleep(3000)
         let response = await request(app)
-        .post('/auth/test')
+        .get('/auth/test')
         .set({ authorization: "barer " + accessToken })
         expect(response.statusCode).not.toEqual(200)
 
         response = await request(app)
-        .post('/auth/refresh')
+        .get('/auth/refresh')
         .set({ authorization: "barer " + refreshToken })
         expect(response.statusCode).toEqual(200)
         accessToken = response.body.accessToken
@@ -106,7 +106,7 @@ describe("This is Auth API test",()=>{
 
 
         response = await request(app)
-        .post('/auth/test')
+        .get('/auth/test')
         .set({ authorization: "barer " + accessToken })
         expect(response.statusCode).toEqual(200)
 

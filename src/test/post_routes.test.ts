@@ -48,7 +48,6 @@ describe("This is Post API test",()=>{
     })
 
     test("Test Post post API", async ()=>{
-        console.log('ACCESS TOKEN= S'+accessToken)
         const response = await request(app).post('/post')
         .set({ authorization: "barer " + accessToken })
         .send({
