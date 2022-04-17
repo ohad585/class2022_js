@@ -46,7 +46,7 @@ if (process.env.NODE_ENV == "development") {
     };
     const specs = swaggerJsDoc(options);
     app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
-    }
+}
 
 import http from 'http';
 const server = http.createServer(app); 
