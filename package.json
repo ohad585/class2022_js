@@ -16,6 +16,7 @@
   "dependencies": {
     "@babel/preset-typescript": "^7.16.7",
     "@socket.io/redis-adapter": "^7.1.0",
+    "@socket.io/redis-emitter": "^4.1.1",
     "@types/redis": "^4.0.11",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.19.2",
