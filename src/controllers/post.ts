@@ -1,5 +1,6 @@
 import Post from '../models/post_model'
 import { Request,Response } from 'express'
+import {broadcastPostMessage} from "../socket_server"
 /**
  * Gets all the post
  * @param {*http request} req 
@@ -40,6 +41,11 @@ const createNewPost = async(req:Request ,res: Response)=>{
 
     try{
         const newPost= await post.save()
+        //send notification to all other users
+        broadcastPostMessage({
+            message : req.body.message,
+            sender : sender._id
+        })
         res.status(200).send(newPost)
     }catch(err){
         res.status(400).send({
